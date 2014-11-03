@@ -23,7 +23,7 @@ class Color:
 
     PATH_BG = 237  # dark grey
     PATH_FG = 250  # light grey
-    CWD_FG = 254  # nearly-white grey
+    CWD_FG = 154#254  # nearly-white grey
     SEPARATOR_FG = 244
 
     REPO_CLEAN_BG = 148  # a light green color
@@ -54,8 +54,8 @@ class Powerline:
             'separator_thin': '\u2B81'
         },
         'default': {
-            'separator': '⮀',
-            'separator_thin': '⮁'
+            'separator': '',
+            'separator_thin': ''
         }
     }
     LSQESCRSQ = '\\[\\e%s\\]'
@@ -115,6 +115,7 @@ def add_cwd_segment(powerline, cwd, maxdepth, cwd_only=False):
     home = os.getenv('HOME')
     cwd = os.getenv('PWD')
 
+    # cwd = "%2~"
     if cwd.find(home) == 0:
         cwd = cwd.replace(home, '~', 1)
 
@@ -122,13 +123,13 @@ def add_cwd_segment(powerline, cwd, maxdepth, cwd_only=False):
         cwd = cwd[1:]
 
     names = cwd.split('/')
-    if len(names) > maxdepth:
-        names = names[:2] + ['⋯ '] + names[2 - maxdepth:]
-
+    if len(names) > 2:
+        names = names[len(names)-2:]
+        
     if not cwd_only:
         for n in names[:-1]:
-            powerline.append(Segment(powerline, ' %s ' % n, Color.PATH_FG, Color.PATH_BG, powerline.separator_thin, Color.SEPARATOR_FG))
-    powerline.append(Segment(powerline, ' %s ' % names[-1], Color.CWD_FG, Color.PATH_BG))
+            powerline.append(Segment(powerline, '%s' % n, Color.PATH_FG, Color.PATH_BG, powerline.separator_thin, Color.SEPARATOR_FG))
+    powerline.append(Segment(powerline, '%s' % names[-1], Color.CWD_FG, Color.PATH_BG))
 
 
 def get_hg_status():
@@ -164,7 +165,7 @@ def add_hg_segment(powerline, cwd):
         if has_missing_files:
             extra += '!'
         branch += (' ' + extra if extra != '' else '')
-    powerline.append(Segment(powerline, ' %s ' % branch, fg, bg))
+    powerline.append(Segment(powerline, '%s' % branch, fg, bg))
     return True
 
 
@@ -206,7 +207,7 @@ def add_git_segment(powerline, cwd):
     has_pending_commits, has_untracked_files, origin_position = get_git_status()
     branch += origin_position
     if has_untracked_files:
-        branch += ' +'
+        branch += ' ★'
 
     bg = Color.REPO_CLEAN_BG
     fg = Color.REPO_CLEAN_FG
@@ -215,7 +216,7 @@ def add_git_segment(powerline, cwd):
         bg = Color.REPO_DIRTY_BG
         fg = Color.REPO_DIRTY_FG
 
-    powerline.append(Segment(powerline, ' %s ' % branch, fg, bg))
+    powerline.append(Segment(powerline, '%s' % branch, fg, bg))
     return True
 
 
@@ -244,7 +245,7 @@ def add_svn_segment(powerline, cwd):
         output = p2.communicate()[0].strip()
         if len(output) > 0 and int(output) > 0:
             changes = output.strip()
-            powerline.append(Segment(powerline, ' %s ' % changes, Color.SVN_CHANGES_FG, Color.SVN_CHANGES_BG))
+            powerline.append(Segment(powerline, '%s' % changes, Color.SVN_CHANGES_FG, Color.SVN_CHANGES_BG))
     except OSError:
         return False
     except subprocess.CalledProcessError:
@@ -270,7 +271,7 @@ def add_virtual_env_segment(powerline, cwd):
     env_name = os.path.basename(env)
     bg = Color.VIRTUAL_ENV_BG
     fg = Color.VIRTUAL_ENV_FG
-    powerline.append(Segment(powerline, ' %s ' % env_name, fg, bg))
+    powerline.append(Segment(powerline, '%s' % env_name, fg, bg))
     return True
 
 
@@ -312,9 +313,9 @@ if __name__ == '__main__':
     add_virtual_env_segment(p, cwd)
     #p.append(Segment(' \\u ', 250, 240))
     #p.append(Segment(' \\h ', 250, 238))
-    add_cwd_segment(p, cwd, 5, args.cwd_only)
+    add_cwd_segment(p, cwd, 3, args.cwd_only)
     add_repo_segment(p, cwd)
-    add_root_indicator(p, args.prev_error)
+    # add_root_indicator(p, args.prev_error)
     if sys.version_info[0] < 3:
         sys.stdout.write(p.draw().encode('utf-8'))
     else:
