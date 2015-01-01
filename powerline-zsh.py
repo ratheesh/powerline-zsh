@@ -21,19 +21,19 @@ class Color:
     # The following link is a pretty good resources for color values:
     # http://www.calmar.ws/vim/color-output.png
 
-    PATH_BG = 237  # dark grey
-    PATH_FG = 250  # light grey
-    CWD_FG = 154#254  # nearly-white grey
+    PATH_BG = 237
+    PATH_FG = 250
+    CWD_FG = 3
     SEPARATOR_FG = 244
 
     REPO_CLEAN_BG = 148  # a light green color
     REPO_CLEAN_FG = 0  # black
-    REPO_DIRTY_BG = 161  # pink/red
+    REPO_DIRTY_BG = 161  # blue
     REPO_DIRTY_FG = 15  # white
 
     CMD_PASSED_BG = 236
     CMD_PASSED_FG = 15
-    CMD_FAILED_BG = 161
+    CMD_FAILED_BG = 9
     CMD_FAILED_FG = 15
 
     SVN_CHANGES_BG = 148
@@ -111,7 +111,7 @@ class Segment:
 
 
 def add_cwd_segment(powerline, cwd, maxdepth, cwd_only=False):
-    #powerline.append(' \\w ', 15, 237)
+    # powerline.append(' \\w ', 15, 237)
     home = os.getenv('HOME')
     cwd = os.getenv('PWD')
 
@@ -125,7 +125,7 @@ def add_cwd_segment(powerline, cwd, maxdepth, cwd_only=False):
     names = cwd.split('/')
     if len(names) > 2:
         names = names[len(names)-2:]
-        
+
     if not cwd_only:
         for n in names[:-1]:
             powerline.append(Segment(powerline, '%s' % n, Color.PATH_FG, Color.PATH_BG, powerline.separator_thin, Color.SEPARATOR_FG))
@@ -216,7 +216,7 @@ def add_git_segment(powerline, cwd):
         bg = Color.REPO_DIRTY_BG
         fg = Color.REPO_DIRTY_FG
 
-    powerline.append(Segment(powerline, '%s' % branch, fg, bg))
+    powerline.append(Segment(powerline, '%s ' % branch, fg, bg))
     return True
 
 
@@ -281,7 +281,7 @@ def add_root_indicator(powerline, error):
     if int(error) != 0:
         fg = Color.CMD_FAILED_FG
         bg = Color.CMD_FAILED_BG
-    powerline.append(Segment(powerline, ' ❄', fg, bg))
+    powerline.append(Segment(powerline,"", fg, bg))
 
 
 def get_valid_cwd():
@@ -315,7 +315,7 @@ if __name__ == '__main__':
     #p.append(Segment(' \\h ', 250, 238))
     add_cwd_segment(p, cwd, 3, args.cwd_only)
     add_repo_segment(p, cwd)
-    # add_root_indicator(p, args.prev_error)
+    add_root_indicator(p, args.prev_error)
     if sys.version_info[0] < 3:
         sys.stdout.write(p.draw().encode('utf-8'))
     else:
