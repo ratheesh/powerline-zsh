@@ -21,15 +21,15 @@ class Color:
     # The following link is a pretty good resources for color values:
     # http://www.calmar.ws/vim/color-output.png
 
-    PATH_BG = 237
+    PATH_BG = 240
     PATH_FG = 250
-    CWD_FG = 3
-    SEPARATOR_FG = 244
+    CWD_FG = 11
+    SEPARATOR_FG = 250
 
-    REPO_CLEAN_BG = 148  # a light green color
-    REPO_CLEAN_FG = 0  # black
+    REPO_CLEAN_BG = 31
+    REPO_CLEAN_FG = 231
     REPO_DIRTY_BG = 161  # blue
-    REPO_DIRTY_FG = 15  # white
+    REPO_DIRTY_FG = 15   # white
 
     CMD_PASSED_BG = 236
     CMD_PASSED_FG = 15
@@ -40,7 +40,7 @@ class Color:
     SVN_CHANGES_FG = 22  # dark green
 
     VIRTUAL_ENV_BG = 35  # a mid-tone green
-    VIRTUAL_ENV_FG = 22
+    VIRTUAL_ENV_FG = 0
 
 
 class Powerline:
@@ -59,7 +59,7 @@ class Powerline:
         }
     }
     LSQESCRSQ = '\\[\\e%s\\]'
-    reset = ' %f%k'
+    reset = '%f%k'
 
     def __init__(self, mode='default'):
         self.separator = Powerline.symbols[mode]['separator']
@@ -204,19 +204,19 @@ def add_git_segment(powerline, cwd):
         branch = '(Detached)'
 
     branch = branch.decode(encoding)
-    has_pending_commits, has_untracked_files, origin_position = get_git_status()
-    branch += origin_position
-    if has_untracked_files:
-        branch += ' ★'
+    # has_pending_commits, has_untracked_files, origin_position = get_git_status()
+    # branch += origin_position
+    # if has_untracked_files:
+    #     branch += ' ★'
 
     bg = Color.REPO_CLEAN_BG
     fg = Color.REPO_CLEAN_FG
 
-    if has_pending_commits:
-        bg = Color.REPO_DIRTY_BG
-        fg = Color.REPO_DIRTY_FG
+    # if has_pending_commits:
+    #     bg = Color.REPO_DIRTY_BG
+    #     fg = Color.REPO_DIRTY_FG
 
-    powerline.append(Segment(powerline, '%s ' % branch, fg, bg))
+    powerline.append(Segment(powerline, '%s' % branch, fg, bg))
     return True
 
 
@@ -281,7 +281,7 @@ def add_root_indicator(powerline, error):
     if int(error) != 0:
         fg = Color.CMD_FAILED_FG
         bg = Color.CMD_FAILED_BG
-    powerline.append(Segment(powerline,"", fg, bg))
+    powerline.append(Segment(powerline, '', fg, bg))
 
 
 def get_valid_cwd():
@@ -316,6 +316,7 @@ if __name__ == '__main__':
     add_cwd_segment(p, cwd, 3, args.cwd_only)
     add_repo_segment(p, cwd)
     add_root_indicator(p, args.prev_error)
+
     if sys.version_info[0] < 3:
         sys.stdout.write(p.draw().encode('utf-8'))
     else:
