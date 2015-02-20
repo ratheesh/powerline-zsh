@@ -42,6 +42,8 @@ class Color:
     VIRTUAL_ENV_BG = 35  # a mid-tone green
     VIRTUAL_ENV_FG = 0
 
+    SSH_BG = 166  # medium orange
+    SSH_FG = 254
 
 class Powerline:
     symbols = {
@@ -54,8 +56,10 @@ class Powerline:
             'separator_thin': '\u2B81'
         },
         'default': {
-            'separator': '',
-            'separator_thin': ''
+            'separator': '\uE0B0',
+            'separator_thin': '\uE0B1',
+            'lock': '\uE0A2',
+            'network': '\uE0A2',
         }
     }
     LSQESCRSQ = '\\[\\e%s\\]'
@@ -64,6 +68,7 @@ class Powerline:
     def __init__(self, mode='default'):
         self.separator = Powerline.symbols[mode]['separator']
         self.separator_thin = Powerline.symbols[mode]['separator_thin']
+        self.network = Powerline.symbols[mode]['network']
         self.segments = []
 
     def color(self, prefix, code):
@@ -274,6 +279,10 @@ def add_virtual_env_segment(powerline, cwd):
     powerline.append(Segment(powerline, '%s' % env_name, fg, bg))
     return True
 
+def add_ssh_segment(powerline):
+
+    if os.getenv('SSH_CLIENT'):
+        powerline.append(Segment(powerline, ' %s ' % powerline.network, Color.SSH_FG, Color.SSH_BG))
 
 def add_root_indicator(powerline, error):
     bg = Color.CMD_PASSED_BG
@@ -310,11 +319,12 @@ if __name__ == '__main__':
 
     p = Powerline(mode='default')
     cwd = get_valid_cwd()
-    add_virtual_env_segment(p, cwd)
+    # add_virtual_env_segment(p, cwd)
     #p.append(Segment(' \\u ', 250, 240))
     #p.append(Segment(' \\h ', 250, 238))
+    add_ssh_segment(p)
     add_cwd_segment(p, cwd, 3, args.cwd_only)
-    add_repo_segment(p, cwd)
+    # add_repo_segment(p, cwd)
     add_root_indicator(p, args.prev_error)
 
     if sys.version_info[0] < 3:
