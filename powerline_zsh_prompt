@@ -1,0 +1,23 @@
+#
+# Authors:
+#   Ratheesh <ratheeshreddy@gmail.com>
+#
+
+function prompt_powerline_zsh_precmd {
+  export PROMPT="$(${ZDOTDIR:-$HOME}/.zprezto/modules/prompt/external/powerline_zsh/powerline-zsh.py $?) "
+  export RPROMPT="$(${ZDOTDIR:-$HOME}/.zprezto/modules/prompt/external/powerline_zsh/powerline-zsh-rprompt.py $?)"
+}
+
+function prompt_powerline_zsh_setup {
+  setopt LOCAL_OPTIONS
+  unsetopt XTRACE KSH_ARRAYS
+  prompt_opts=(cr percent subst)
+
+  autoload -Uz add-zsh-hook
+
+  add-zsh-hook precmd prompt_powerline_zsh_precmd
+
+}
+
+prompt_powerline_zsh_setup "$@"
+
