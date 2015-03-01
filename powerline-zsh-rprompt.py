@@ -26,7 +26,7 @@ class Color:
     CWD_FG = 11
     SEPARATOR_FG = 250
 
-    REPO_CLEAN_BG = 9 #180 #236
+    REPO_CLEAN_BG = 147 #180 #236
     REPO_CLEAN_FG = 16
     REPO_DIRTY_BG = 161  # blue
     REPO_DIRTY_FG = 15   # white
@@ -42,7 +42,7 @@ class Color:
     SVN_CHANGES_BG = 148
     SVN_CHANGES_FG = 22  # dark green
 
-    VIRTUAL_ENV_BG = 12 #35  # a mid-tone green
+    VIRTUAL_ENV_BG = 5 #35  # a mid-tone green
     VIRTUAL_ENV_FG = 15
 
 
