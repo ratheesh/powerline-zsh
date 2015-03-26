@@ -26,8 +26,8 @@ class Color:
     CWD_FG = 11
     SEPARATOR_FG = 250
 
-    REPO_CLEAN_BG = 147 #180 #236
-    REPO_CLEAN_FG = 16
+    REPO_CLEAN_BG = 236 #180 #236
+    REPO_CLEAN_FG = 252
     REPO_DIRTY_BG = 161  # blue
     REPO_DIRTY_FG = 15   # white
 

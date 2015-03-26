@@ -21,7 +21,7 @@ class Color:
     # The following link is a pretty good resources for color values:
     # http://www.calmar.ws/vim/color-output.png
 
-    PATH_BG = 240
+    PATH_BG = 238
     PATH_FG = 250
     CWD_FG = 11
     SEPARATOR_FG = 250
@@ -31,7 +31,7 @@ class Color:
     REPO_DIRTY_BG = 161  # blue
     REPO_DIRTY_FG = 15   # white
 
-    CMD_PASSED_BG = 236
+    CMD_PASSED_BG = 234
     CMD_PASSED_FG = 15
     CMD_FAILED_BG = 9
     CMD_FAILED_FG = 15
